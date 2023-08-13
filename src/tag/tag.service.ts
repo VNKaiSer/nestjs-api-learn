@@ -6,7 +6,7 @@ import { ResTagListDto } from '@app/tag/dto/resTagList.dto';
 
 @Injectable()
 export class TagService {
-  constructor(private readonly tagRepository: TagRepository) {}
+  constructor(private readonly tagRepository: TagRepository) { }
 
   async findAll(): Promise<ResTagListDto> {
     const tags = await this.tagRepository.findAll();
@@ -58,5 +58,10 @@ export class TagService {
     return {
       tags: tags.map((tag) => tag.name),
     };
+  }
+
+  async insertTag(name: string): Promise<TagEntity> {
+    console.log(name)
+    return await this.tagRepository.createTag(name);
   }
 }

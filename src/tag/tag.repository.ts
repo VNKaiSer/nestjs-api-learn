@@ -5,7 +5,7 @@ import { TagEntity } from './entity/tag.entity';
 
 @Injectable()
 export class TagRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async findAll(prisma: Tx = this.prisma): Promise<TagEntity[]> {
     return await prisma.tag.findMany();
@@ -96,5 +96,18 @@ export class TagRepository {
         },
       },
     });
+  }
+
+  async insertTag(
+    name: string,
+    prisma: Tx = this.prisma,
+  ): Promise<TagEntity> {
+
+
+    return await prisma.tag.create({
+      data: {
+        name
+      }
+    })
   }
 }
