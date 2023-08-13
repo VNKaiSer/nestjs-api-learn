@@ -8,7 +8,8 @@ import { include } from './comment.select';
 
 @Injectable()
 export class CommentRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
+
   async createComment(
     data: CommentToDBDto,
     prisma: Tx = this.prisma,
