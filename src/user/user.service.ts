@@ -12,6 +12,7 @@ import { Token } from '@app/auth/iterface/auth.interface';
 import { UserCheck } from '@app/user/user.check';
 import { ResUserWithTokenDto } from './dto/resUserWithToken.dto';
 import { HttpExceptionCustom } from '@app/common/common.exception';
+import { ResUserListDTO } from './dto/resUserList.dto';
 
 @Injectable()
 export class UserService {
@@ -259,7 +260,14 @@ export class UserService {
     };
   }
 
-  async getAllUsers(): Promise<UserEntity> {
-    return this.userRepository.getAllUsers();
+  private builtUserListResponse(users: UserEntity[]): ResUserListDTO {
+    return {
+      users: users.map((user) => user),
+    };
+  }
+
+  async getAllUsers(): Promise<ResUserListDTO> {
+    const users = await this.userRepository.getAllUsers();
+    return this.builtUserListResponse(users);
   }
 }

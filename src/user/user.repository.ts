@@ -93,8 +93,10 @@ export class UserRepository {
 
   async getAllUsers(
     prisma: Tx = this.prisma
-  ): Promise<UserEntity> {
-    console.log(prisma.user.findMany());
-    return null;
+  ): Promise<UserEntity[]> {
+
+    return await prisma.user.findMany();
   }
+
+
 }

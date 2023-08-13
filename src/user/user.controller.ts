@@ -27,6 +27,7 @@ import { Token } from '@app/auth/iterface/auth.interface';
 import { ResUserDto } from '@app/user/dto/resUser.dto';
 import { CustomValidationPipe } from '@app/common/common.pipe';
 import { UserEntity } from './entity/user.entity';
+import { ResUserListDTO } from './dto/resUserList.dto';
 
 @ApiTags('user')
 @Controller()
@@ -83,8 +84,10 @@ export class UserController {
     return await this.userService.updateUser(userUpdateDto, auth);
   }
 
+  @ApiCreatedResponse({ type: ResUserListDTO })
   @Get('users')
-  async getAllUsers(): Promise<UserEntity> {
+  @UsePipes(new CustomValidationPipe())
+  async findAll(): Promise<ResUserListDTO> {
     return await this.userService.getAllUsers();
   }
 }
