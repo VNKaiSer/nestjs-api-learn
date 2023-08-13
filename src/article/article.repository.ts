@@ -11,7 +11,7 @@ import { Tx } from '@app/common/common.type';
 
 @Injectable()
 export class ArticleRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async createArticle(
     data: ArticleToDBDto,
@@ -293,5 +293,11 @@ export class ArticleRepository {
         [orderBy]: direction,
       },
     };
+  }
+
+  async getAllArticles(
+    prisma: Tx = this.prisma,
+  ): Promise<ArticleEntity[]> {
+    return await prisma.article.findMany();
   }
 }

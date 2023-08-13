@@ -27,25 +27,26 @@ import { ResCommentDto } from '@app/comment/dto/resComment.dto';
 import { CommentCreateDto } from '@app/comment/dto/commentCreate.dto';
 import { ResCommentListDto } from '@app/comment/dto/resCommentList.dto';
 import { CustomValidationPipe } from '@app/common/common.pipe';
+import { ArticleEntity } from './entity/article.entity';
 
 @ApiTags('articles')
 @Controller('articles')
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(private readonly articleService: ArticleService) { }
 
-  @Get()
-  @ApiCreatedResponse({ type: ResArticeFeedDto })
-  @UsePipes(new CustomValidationPipe())
-  async getArticleAll(
-    @Headers('Authorization') token: Token,
-    @Query() query: IArtilceQueryParamsOptional,
-  ): Promise<ResArticeFeedDto> {
-    const params = parseQueryParams(query);
-    return await this.articleService.getArticleAllByParamsAndToken(
-      params,
-      token,
-    );
-  }
+  // @Get()
+  // @ApiCreatedResponse({ type: ResArticeFeedDto })
+  // @UsePipes(new CustomValidationPipe())
+  // async getArticleAll(
+  //   @Headers('Authorization') token: Token,
+  //   @Query() query: IArtilceQueryParamsOptional,
+  // ): Promise<ResArticeFeedDto> {
+  //   const params = parseQueryParams(query);
+  //   return await this.articleService.getArticleAllByParamsAndToken(
+  //     params,
+  //     token,
+  //   );
+  // }
 
   @UseGuards(AuthGuard)
   @Get('feed')
@@ -170,4 +171,13 @@ export class ArticleController {
   ): Promise<void> {
     await this.articleService.deleteCommentById(slug, id, auth);
   }
+
+  // @ApiCreatedResponse()
+  @Get()
+  // @UsePipes(new CustomValidationPipe())
+  async findAll(): Promise<ArticleEntity[]> {
+    console.log('hehe');
+    return await this.articleService.getAllArticles();
+  }
+
 }

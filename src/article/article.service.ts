@@ -22,6 +22,7 @@ import { CommentCreateDto } from '@app/comment/dto/commentCreate.dto';
 import { ResCommentDto } from '@app/comment/dto/resComment.dto';
 import { CommentService } from '@app/comment/comment.service';
 import { ResCommentListDto } from '@app/comment/dto/resCommentList.dto';
+import { ArticleEntity } from './entity/article.entity';
 
 @Injectable()
 export class ArticleService {
@@ -33,7 +34,7 @@ export class ArticleService {
     private readonly articleTransaction: ArticleTransaction,
     private readonly articleCheck: ArticleCheck,
     private readonly commentService: CommentService,
-  ) {}
+  ) { }
 
   async getArticleAllByParamsAndToken(
     queryParams: IArticleQueryParamsRequered,
@@ -466,5 +467,9 @@ export class ArticleService {
     article: ArticleFullDataSerializedDto,
   ): ResArticleDto {
     return { article };
+  }
+
+  async getAllArticles(): Promise<ArticleEntity[]> {
+    return await this.articleRepository.getAllArticles();
   }
 }
