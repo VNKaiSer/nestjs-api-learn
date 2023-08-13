@@ -98,5 +98,24 @@ export class UserRepository {
     return await prisma.user.findMany();
   }
 
+  async insertUser(
+    username: string,
+    email: string,
+    password: string,
+    bio: string,
+    image: string,
+    prisma: Tx = this.prisma
+  ): Promise<UserEntity> {
+    return await prisma.user.create({
+      data: {
+        username,
+        email,
+        password,
+        bio,
+        image
+      }
+    })
+  }
+
 
 }

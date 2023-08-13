@@ -270,4 +270,20 @@ export class UserService {
     const users = await this.userRepository.getAllUsers();
     return this.builtUserListResponse(users);
   }
+
+  async insertUser(
+    username: string,
+    email: string,
+    password: string,
+    bio: string,
+    image: string
+  ): Promise<UserEntity> {
+    return await this.userRepository.insertUser(
+      username,
+      email,
+      password,
+      bio,
+      image
+    );
+  }
 }

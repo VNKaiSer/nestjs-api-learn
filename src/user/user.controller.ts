@@ -7,6 +7,7 @@ import {
   Body,
   UseGuards,
   UsePipes,
+  Query,
 } from '@nestjs/common';
 import { UserRequestCreateDto } from '@app/user/dto/userRequestCreate.dto';
 import {
@@ -89,5 +90,30 @@ export class UserController {
   @UsePipes(new CustomValidationPipe())
   async findAll(): Promise<ResUserListDTO> {
     return await this.userService.getAllUsers();
+  }
+
+  @Post('users/insert')
+  @ApiCreatedResponse()
+  // @UsePipes(new CustomValidationPipe())
+  async insertUser(
+    @Query() raw: any
+  ): Promise<UserEntity> {
+    const map = new Map<string, string>(Object.entries(raw))
+    const user = {
+      username: map.get("username"),
+      email: map.get("email"),
+      password: map.get("password"),
+      bio: map.get("bio"),
+      image: map.get("image")
+    }
+
+    console.log(user);
+    return await this.userService.insertUser(
+      user.username,
+      user.email,
+      user.password,
+      user.bio,
+      user.image
+    );
   }
 }
