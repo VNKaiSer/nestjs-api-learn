@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tag {
+  id       Int            @id @default(autoincrement())
+  name     String         @unique
+  articles ArticleToTag[]
+}
+
+model User {
+  id         Int             @id @default(autoincrement())
+  username   String          @unique
+  email      String          @unique @default("")
+  password   String
+  bio        String?
+  image      String?
+  article    Article[]
+  favorites  UserToArticle[]
+  followedBy UserToUser[]    @relation("UserToUserFollowed")
+  following  UserToUser[]    @relation("UserToUserFollowing")
+  Comment    Comment[]
+}
+
+model Article {
+  id             Int             @id @default(autoincrement())
+  slug           String          @unique
+  title          String
+  description    String          @default("")
+  body           String          @default("")
+  tagList        ArticleToTag[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  favoritesCount Int             @default(0)
+  favoritedBy    UserToArticle[]
+  author         User            @relation(fields: [authorId], references: [id])
+  authorId       Int
+  Comment        Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  body      String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId Int
+}
+
+model UserToUser {
+  id          Int  @id @default(autoincrement())
+  follower    User @relation("UserToUserFollowing", fields: [followerId], references: [id])
+  followerId  Int
+  following   User @relation("UserToUserFollowed", fields: [followingId], references: [id])
+  followingId Int
+
+  @@unique([followerId, followingId])
+}
+
+model UserToArticle {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  articleId Int
+
+  @@unique([userId, articleId])
+}
+
+model ArticleToTag {
+  id        Int     @id @default(autoincrement())
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId Int
+  tag       Tag     @relation(fields: [tagId], references: [id])
+  tagId     Int
+
+  @@unique([articleId, tagId])
+}
