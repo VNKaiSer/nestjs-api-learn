@@ -5,6 +5,7 @@ import { UserEntity } from '@app/user/entity/user.entity';
 import { UserUpdateDto } from './dto/userUpdate.dto';
 import { Tx } from '@app/common/common.type';
 import { log } from 'console';
+import { async } from 'rxjs';
 
 @Injectable()
 export class UserRepository {
@@ -115,6 +116,25 @@ export class UserRepository {
         image
       }
     })
+  }
+
+  async deleteUserByUserName(
+    username: string,
+    prisma: Tx = this.prisma
+  ): Promise<boolean> {
+    try {
+      const where = {
+        username
+      }
+
+      await prisma.user.delete({
+        where
+      })
+      return true
+    } catch (error) {
+      console.log(error)
+      return false
+    }
   }
 
 

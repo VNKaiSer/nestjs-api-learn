@@ -8,6 +8,7 @@ import {
   UseGuards,
   UsePipes,
   Query,
+  Delete
 } from '@nestjs/common';
 import { UserRequestCreateDto } from '@app/user/dto/userRequestCreate.dto';
 import {
@@ -107,7 +108,7 @@ export class UserController {
       image: map.get("image")
     }
 
-    console.log(user);
+    // console.log(user);
     return await this.userService.insertUser(
       user.username,
       user.email,
@@ -115,5 +116,15 @@ export class UserController {
       user.bio,
       user.image
     );
+  }
+
+  @Delete('users/delete')
+  @ApiCreatedResponse()
+  async deleteUserByUserName(
+    @Query() raw: any
+  ): Promise<boolean> {
+    const map = new Map<string, string>(Object.entries(raw))
+    const username = map.get("username")
+    return await this.userService.deleteUserByUserName(username);
   }
 }

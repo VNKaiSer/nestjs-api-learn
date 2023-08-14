@@ -286,4 +286,10 @@ export class UserService {
       image
     );
   }
+
+  async deleteUserByUserName(
+    username: string
+  ): Promise<boolean> {
+    return await this.userRepository.deleteUserByUserName(username);
+  }
 }
